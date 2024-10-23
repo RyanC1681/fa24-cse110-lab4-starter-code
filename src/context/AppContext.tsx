@@ -1,5 +1,6 @@
 import { createContext, useState } from "react";
 import { Expense } from "../types/types";
+import Budget from "../components/Budget/Budget";
 
 // Exercise: Create add budget to the context
 
@@ -23,6 +24,8 @@ export const AppProvider = (props: any) => {
       value={{
         expenses: expenses,
         setExpenses: setExpenses,
+        //budget:setbudget,
+        //budget:Budget,
       }}
     >
       {props.children}
