@@ -76,6 +76,7 @@ describe("Test Expense Updates", () => {
     const spy = jest.spyOn(window, "alert");
     fireEvent.change(name, { target: { value: "Test on item2" } });
     fireEvent.change(cost, { target: { value: 2000 } });
+    //fireEvent.change(cost, { target: { value: 1000 } }); // make test fail
     fireEvent.click(saveButton);
     
 
