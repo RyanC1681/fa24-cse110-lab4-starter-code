@@ -1,5 +1,7 @@
 import { useContext } from "react";
 import { AppContext } from "../context/AppContext";
+import { useEffect } from "react";
+
 
 const Remaining = () => {
   const { expenses } = useContext(AppContext);
@@ -12,6 +14,13 @@ const Remaining = () => {
   const alertType = totalExpenses > budget ? "alert-danger" : "alert-success";
 
   // Exercise: Create an alert when Remaining is less than 0.
+
+  useEffect(() => {
+    if (budget - totalExpenses < 0) {
+      alert("Warning, Over Budget!");
+    }
+  }, [totalExpenses]);
+
 
   return (
     <div className={`alert ${alertType}`}>
