@@ -5,6 +5,9 @@ import ExpenseItem from "./ExpenseItem";
 import ExpenseList from "./ExpenseList";
 import { AppContext } from "../../context/AppContext";
 import { Expense } from "../../types/types";
+import { createExpense } from "../../utils/expense-utils";
+
+//exercise 1 done
 
 
 const AddExpenseForm = () => {
@@ -36,6 +39,7 @@ const newEntry: Expense = {
   //id: `${createEntry.name}${expenses.length + 1}`,
   id: `${createEntry.description+1}`,
 };
+createExpense(newEntry);
 setExpenses([...expenses, newEntry]);
 };
 
