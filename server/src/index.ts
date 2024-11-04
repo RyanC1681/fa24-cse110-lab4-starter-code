@@ -1,6 +1,11 @@
 import { Request, Response } from "express";
 import { expenses } from "./constants";
+import { budget } from "./constants";
+
 import { createExpenseEndpoints } from "./expenses/expense-endpoints";
+import { createBudgetEndpoints } from "./budget/budget-endpoints";
+
+
 
 const express = require("express");
 const cors = require("cors");
@@ -22,4 +27,7 @@ app.get("/", (req: Request, res: Response) => {
   res.status(200);
 });
 
+// exercise 3 done//
+
 createExpenseEndpoints(app, expenses);
+createBudgetEndpoints(app, budget);
