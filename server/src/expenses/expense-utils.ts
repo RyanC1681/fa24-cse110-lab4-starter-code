@@ -1,38 +1,52 @@
 import { Expense } from "../types";
 import { Request, Response } from "express";
+import { Database } from "sqlite";
 
-export function createExpenseServer(req: Request, res: Response, expenses: Expense[]) {
-    const { id, cost, description } = req.body;
 
-    if (!description || !id || !cost) {
-        return res.status(400).send({ error: "Missing required fields" });
-    }
+export async function createExpenseServer(req: Request, res: Response, db: Database) {
 
-    const newExpense: Expense = {
-        id: id,
-        description,
-        cost,
+    try {
+        // Type casting the request body to the expected format.
+        const { id, cost, description } = req.body as { id: string, cost: number, description: string };
+ 
+        if (!description || !id || !cost) {
+            return res.status(400).send({ error: "Missing required fields" });
+        }
+ 
+        await db.run('INSERT INTO expenses (id, description, cost) VALUES (?, ?, ?);', [id, description, cost]);
+        res.status(201).send({ id, description, cost });
+ 
+    } catch (error) {
+ 
+        return res.status(400).send({ error: `Expense could not be created, + ${error}` });
     };
+ 
+ }
 
-    expenses.push(newExpense);
-    res.status(201).send(newExpense);
-}
+ //Lab 6 exercise done
 
-export function deleteExpense(req: Request, res: Response, expenses: Expense[]) {
-    // TO DO: Implement deleteExpense function
-    //Exercise 1 done
-
+ export async function deleteExpense(
+    req: Request,
+    res: Response,
+    db: Database
+  ) {
     const { id } = req.params;
-
-    const expenseIndex = expenses.findIndex((e: Expense) => e.id === id);
-    if(expenseIndex === -1) {
-        return res.status(400).send({ error: "Entry does not found" });
+    console.log(id);
+    const idDb = await db.all("SELECT id FROM expenses WHERE id = ?;", [id]);
+    if (idDb .length === 0) {
+      return res.status(400).send({ error: "Warning: Expense could not be found" });
     }
-
-    expenses.splice(expenseIndex, 1);
+    await db.run("DELETE FROM expenses WHERE id = ?;", [id]);
     res.status(201).send();
-}
+  }
+  
 
-export function getExpenses(req: Request, res: Response, expenses: Expense[]) {
-    res.status(200).send({ "data": expenses });
+
+
+export async function getExpenses(req: Request, res: Response, db: Database) {
+    
+  const allExpenses = await db.all("SELECT * FROM expenses");
+  console.log(allExpenses );
+  res.status(200).send({ data: allExpenses  });
+
 }
